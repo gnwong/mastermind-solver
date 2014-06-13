@@ -6,4 +6,4 @@
 CC=g++
 
 all:
-	$(CC) main.cpp challenger.cpp -o main
+	$(CC) main.cpp challenger.cpp adversary.cpp -o main

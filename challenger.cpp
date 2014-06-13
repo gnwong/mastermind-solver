@@ -4,7 +4,7 @@
  *
  */
 
-#include "Challenger.hpp"
+#include "challenger.hpp"
 
 // Takes "type" as arguement and generates
 // a first set of random numbers.
@@ -25,11 +25,7 @@ bool Challenger::reset () {
   std::default_random_engine gen(time(NULL));
   std::uniform_int_distribution<int> distribution(this->range[0],this->range[1]);
 
-  this->my_numbers.clear();
-  this->my_numbers.push_back(distribution(gen));
-  this->my_numbers.push_back(distribution(gen));
-  this->my_numbers.push_back(distribution(gen));
-  this->my_numbers.push_back(distribution(gen));
+  this->truth.reset(distribution(gen),distribution(gen),distribution(gen),distribution(gen));
 
   return true;
 }
@@ -42,12 +38,8 @@ bool Challenger::change_type (int t) {
 }
 
 // Returns the current values stored in the challenger.
-void Challenger::get_truth (std::vector <int> *vec) {
-  vec->clear();
-  vec->push_back(this->my_numbers.at(0));
-  vec->push_back(this->my_numbers.at(1));
-  vec->push_back(this->my_numbers.at(2));
-  vec->push_back(this->my_numbers.at(3));
+void Challenger::get_truth (Guess *guess) {
+  guess->reset(this->truth.a,this->truth.b,this->truth.c,this->truth.d);
 }
 
 // Returns the challenger type.
@@ -56,15 +48,15 @@ int Challenger::get_type () {
 }
 
 // Returns the "red" and "white" numbers for a given guess.
-bool Challenger::query (std::vector<int> *guess, int *rw) {
-  return this->get_correlation (guess, &this->my_numbers, rw);
+bool Challenger::query (Guess *guess, int *rw) {
+  return this->get_correlation (guess, &this->truth, rw);
 }
 
 // By convention, we think of the response in terms of "red" and "white", 
 // where red is the number of objects in the correct position and white is
 // the number of correct objects (in incorrect positions). In our function,
 // *a is a pointer to the guess and *b points to the truth.
-bool Challenger::get_correlation (std::vector<int> *a, std::vector<int> *b, int *rw) {
+bool Challenger::get_correlation (Guess *guess, Guess *truth, int *rw) {
   bool aused[4] = {false, false, false, false};
   bool bused[4] = {false, false, false, false};
 
@@ -72,7 +64,7 @@ bool Challenger::get_correlation (std::vector<int> *a, std::vector<int> *b, int 
   rw[1] = 0;
 
   for (int i=0; i<4; i++) {
-    if (a->at(i) == b->at(i)) {
+    if (guess->at(i) == truth->at(i)) {
       rw[0] += 1;
       aused[i] = true;
       bused[i] = true;
@@ -83,7 +75,7 @@ bool Challenger::get_correlation (std::vector<int> *a, std::vector<int> *b, int 
     if (aused[i]) continue;
     for (int j=0; j<4; j++) {
       if (bused[j]) continue;
-      if (a->at(i) == b->at(j)) {
+      if (guess->at(i) == truth->at(j)) {
         rw[1] += 1;
         bused[j] = true;
       }

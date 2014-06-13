@@ -7,6 +7,11 @@
 #include <vector>
 #include <random>
 
+#ifndef GUESS
+ #define GUESS
+ #include "guess.hpp"
+#endif
+
 class Challenger {
 
   public:
@@ -14,18 +19,18 @@ class Challenger {
     ~Challenger ();
 
     bool reset ();
-    
+
     bool change_type (int t);
     int get_type ();
 
-    void get_truth (std::vector <int> *vec);
+    void get_truth (Guess *guess);
 
-    bool query (std::vector<int> *guess, int *rw);
-    bool get_correlation (std::vector<int> *a, std::vector<int> *b, int *rw);
+    bool query (Guess *guess, int *rw);
+    bool get_correlation (Guess *guess, Guess *truth, int *rw);
 
   private:
     int type;
     int range[2];
-    std::vector<int> my_numbers;
+    Guess truth;
 };
 
