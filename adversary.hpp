@@ -18,7 +18,7 @@
 class Adversary {
 
   public:
-    Adversary (Challenger *C);
+    Adversary (Challenger &C);
     ~Adversary ();
 
     int dumb ();
@@ -27,7 +27,7 @@ class Adversary {
     int smart ();
 
   private:
-    Challenger *C;
+    Challenger &C;
     int range[2];
                       // The angry observer might protest this should be a preprocessor
     int verbosity;    // variable. I disagree, citing the fact it might be pleasant to

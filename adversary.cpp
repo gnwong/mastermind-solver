@@ -7,8 +7,8 @@
 #include "adversary.hpp"
 
 // Constructor
-Adversary::Adversary (Challenger *C) {
-  this->C = C;
+Adversary::Adversary (Challenger &C) : C(C) {
+  //this->C = C;
   this->verbosity = 0;
   this->range[0] = 1;
   this->range[1] = 9;
@@ -38,7 +38,7 @@ int Adversary::naive () {
     if (this->verbosity > 2) 
       std::cout << "guess: " << guess.a << " " << guess.b 
       << " " << guess.c << " " << guess.d << std::endl;
-    if (C->query(&guess, rw)) break;
+    if (C.query(&guess, rw)) break;
   }
 
   return queries;
@@ -48,6 +48,7 @@ int Adversary::naive () {
 // responses to previous guesses
 int Adversary::efficient () {
 
+  std::vector<Guess> valid_guesses;
   int c = 0;
 
   // Populate the allowed vectors
@@ -55,18 +56,21 @@ int Adversary::efficient () {
     for (int j=1; j<10; j++) {
       for (int k=1; k<10; k++) {
         for (int l=1; l<10; l++) {
-          // TODO 
+          valid_guesses.push_back(Guess(i,j,k,l));
           printf("%d %d %d %d\n", i,j,k,l);
         }
       }
     }
   }
 
+  std::cout << valid_guesses.size() << std::endl;
 
   return 0;
 }
 
-// TODO
+// Only responds with guesses that are consistent
+// with previous responses and that minimize the
+// standard deviation of the resultant sets.
 int Adversary::smart () {
 
   return 0;

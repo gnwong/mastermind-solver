@@ -36,19 +36,24 @@
 #endif
 
 
-void human (Challenger *C);
-void test1 (Challenger *C);
+void human (Challenger &C);
+void test1 (Challenger &C);
 
 int main (int argc, char **argv) {
 
   Challenger C = Challenger(0);
-  Adversary A  = Adversary(&C);
+  Adversary A  = Adversary(C);
 
   // Call the naive solver as below
   std::cout << "Naive guess count: " << A.naive() << std::endl;
 
   // Start a human game as below
-  human(&C);
+  human(C);
+
+
+
+  // Some tests below
+  test1(C);
   
 
   return 0;
@@ -56,12 +61,12 @@ int main (int argc, char **argv) {
 
 
 // Runs a game with a human guesser
-void human (Challenger *C) {
+void human (Challenger &C) {
 
   int a,b,c,d,rw[2];
   bool solved = false;
   Guess guess;
-  C->reset();
+  C.reset();
 
   std::cout << "Guess: a b c d\n";
   
@@ -70,14 +75,14 @@ void human (Challenger *C) {
     scanf("%d%d%d%d", &a, &b, &c, &d);
     guess.reset(a,b,c,d);
     
-    solved = C->query(&guess,rw);
+    solved = C.query(&guess,rw);
     std::cout << rw[0] << " " << rw[1] << std::endl;
   }
 }
 
 // Runs some simple tests to see if the Challenger has "get_correlation"
 // implemented correctly.
-void test1 (Challenger *C) {
+void test1 (Challenger &C) {
   Guess guess;
   Guess truth;
   int rw[2];
@@ -85,25 +90,25 @@ void test1 (Challenger *C) {
   // 2 2
   guess.reset(1,2,3,4);
   truth.reset(1,2,4,3);
-  C->get_correlation(&guess,&truth,rw);
+  C.get_correlation(&guess,&truth,rw);
   std::cout << rw[0] << "," << rw[1] << std::endl;
 
   // 2 0
   guess.reset(1,1,1,1);
   truth.reset(1,1,7,7);
-  C->get_correlation(&guess,&truth,rw);
+  C.get_correlation(&guess,&truth,rw);
   std::cout << rw[0] << "," << rw[1] << std::endl;
 
   // 0 4
   guess.reset(1,2,3,4);
   truth.reset(4,3,2,1);
-  C->get_correlation(&guess,&truth,rw);
+  C.get_correlation(&guess,&truth,rw);
   std::cout << rw[0] << "," << rw[1] << std::endl;
 
   // 1 2
   guess.reset(2,1,1,4);
   truth.reset(1,1,2,5);
-  C->get_correlation(&guess,&truth,rw);
+  C.get_correlation(&guess,&truth,rw);
   std::cout << rw[0] << "," << rw[1] << std::endl;
 }
 

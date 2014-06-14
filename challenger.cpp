@@ -38,8 +38,8 @@ bool Challenger::change_type (int t) {
 }
 
 // Returns the current values stored in the challenger.
-void Challenger::get_truth (Guess *guess) {
-  guess->reset(this->truth.a,this->truth.b,this->truth.c,this->truth.d);
+void Challenger::get_truth (Guess &guess) {
+  guess.reset(this->truth.a,this->truth.b,this->truth.c,this->truth.d);
 }
 
 // Returns the challenger type.

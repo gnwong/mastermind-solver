@@ -23,7 +23,7 @@ class Challenger {
     bool change_type (int t);
     int get_type ();
 
-    void get_truth (Guess *guess);
+    void get_truth (Guess &guess);
 
     bool query (Guess *guess, int *rw);
     bool get_correlation (Guess *guess, Guess *truth, int *rw);
