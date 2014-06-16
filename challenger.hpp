@@ -24,6 +24,7 @@ class Challenger {
     int get_type ();
 
     void get_truth (Guess &guess);
+    void print_truth ();
 
     bool query (Guess &guess, int rw[]);
     bool get_correlation (Guess &guess, Guess &truth, int rw[]);

@@ -52,6 +52,9 @@ int main (int argc, char **argv) {
 
   // Some tests below
   //test1(C);
+
+  // Run an efficient test
+  std::cout << "Efficient guessing scheme count: " << A.efficient() << std::endl;
   
 
   return 0;

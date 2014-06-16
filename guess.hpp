@@ -38,4 +38,8 @@ struct Guess {
     this->d = z;
   }
 
+  void print () {
+    printf("< %d %d %d %d >\n", this->a, this->b, this->c, this->d);
+  }
+
 };

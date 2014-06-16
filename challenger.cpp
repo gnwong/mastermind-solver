@@ -22,7 +22,7 @@ Challenger::~Challenger () {
 // Generates a new randomized set.
 bool Challenger::reset () {
 
-  std::default_random_engine gen(time(NULL));
+  std::default_random_engine gen(clock());
   std::uniform_int_distribution<int> distribution(this->range[0],this->range[1]);
 
   this->truth.reset(distribution(gen),distribution(gen),distribution(gen),distribution(gen));
@@ -40,6 +40,11 @@ bool Challenger::change_type (int t) {
 // Returns the current values stored in the challenger.
 void Challenger::get_truth (Guess &guess) {
   guess.reset(this->truth.a,this->truth.b,this->truth.c,this->truth.d);
+}
+
+// Prints the "truth" to the screen. Used for debugging only!
+void Challenger::print_truth () {
+  this->truth.print();
 }
 
 // Returns the challenger type.
