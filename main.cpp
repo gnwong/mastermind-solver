@@ -45,15 +45,13 @@ int main (int argc, char **argv) {
   Adversary A  = Adversary(C);
 
   // Call the naive solver as below
-  std::cout << "Naive guess count: " << A.naive() << std::endl;
+  //std::cout << "Naive guess count: " << A.naive() << std::endl;
 
   // Start a human game as below
-  human(C);
-
-
+  //human(C);
 
   // Some tests below
-  test1(C);
+  //test1(C);
   
 
   return 0;
@@ -74,8 +72,7 @@ void human (Challenger &C) {
     std::cout << "Guess: ";
     scanf("%d%d%d%d", &a, &b, &c, &d);
     guess.reset(a,b,c,d);
-    
-    solved = C.query(&guess,rw);
+    solved = C.query(guess,rw);
     std::cout << rw[0] << " " << rw[1] << std::endl;
   }
 }
@@ -90,27 +87,26 @@ void test1 (Challenger &C) {
   // 2 2
   guess.reset(1,2,3,4);
   truth.reset(1,2,4,3);
-  C.get_correlation(&guess,&truth,rw);
+  C.get_correlation(guess,truth,rw);
   std::cout << rw[0] << "," << rw[1] << std::endl;
 
   // 2 0
   guess.reset(1,1,1,1);
   truth.reset(1,1,7,7);
-  C.get_correlation(&guess,&truth,rw);
+  C.get_correlation(guess,truth,rw);
   std::cout << rw[0] << "," << rw[1] << std::endl;
 
   // 0 4
   guess.reset(1,2,3,4);
   truth.reset(4,3,2,1);
-  C.get_correlation(&guess,&truth,rw);
+  C.get_correlation(guess,truth,rw);
   std::cout << rw[0] << "," << rw[1] << std::endl;
 
   // 1 2
   guess.reset(2,1,1,4);
   truth.reset(1,1,2,5);
-  C.get_correlation(&guess,&truth,rw);
+  C.get_correlation(guess,truth,rw);
   std::cout << rw[0] << "," << rw[1] << std::endl;
 }
-
 
 

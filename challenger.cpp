@@ -48,15 +48,15 @@ int Challenger::get_type () {
 }
 
 // Returns the "red" and "white" numbers for a given guess.
-bool Challenger::query (Guess *guess, int *rw) {
-  return this->get_correlation (guess, &this->truth, rw);
+bool Challenger::query (Guess &guess, int rw[]) {
+  return this->get_correlation (guess, this->truth, rw);
 }
 
 // By convention, we think of the response in terms of "red" and "white", 
 // where red is the number of objects in the correct position and white is
 // the number of correct objects (in incorrect positions). In our function,
 // *a is a pointer to the guess and *b points to the truth.
-bool Challenger::get_correlation (Guess *guess, Guess *truth, int *rw) {
+bool Challenger::get_correlation (Guess &guess, Guess &truth, int rw[]) {
   bool aused[4] = {false, false, false, false};
   bool bused[4] = {false, false, false, false};
 
@@ -64,7 +64,7 @@ bool Challenger::get_correlation (Guess *guess, Guess *truth, int *rw) {
   rw[1] = 0;
 
   for (int i=0; i<4; i++) {
-    if (guess->at(i) == truth->at(i)) {
+    if (guess.at(i) == truth.at(i)) {
       rw[0] += 1;
       aused[i] = true;
       bused[i] = true;
@@ -75,7 +75,7 @@ bool Challenger::get_correlation (Guess *guess, Guess *truth, int *rw) {
     if (aused[i]) continue;
     for (int j=0; j<4; j++) {
       if (bused[j]) continue;
-      if (guess->at(i) == truth->at(j)) {
+      if (guess.at(i) == truth.at(j)) {
         rw[1] += 1;
         bused[j] = true;
       }
@@ -85,6 +85,5 @@ bool Challenger::get_correlation (Guess *guess, Guess *truth, int *rw) {
   if (rw[0] == 4) return true;
   return false;
 }
-
 
 

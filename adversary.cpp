@@ -38,7 +38,7 @@ int Adversary::naive () {
     if (this->verbosity > 2) 
       std::cout << "guess: " << guess.a << " " << guess.b 
       << " " << guess.c << " " << guess.d << std::endl;
-    if (C.query(&guess, rw)) break;
+    if (C.query(guess, rw)) break;
   }
 
   return queries;

@@ -25,8 +25,8 @@ class Challenger {
 
     void get_truth (Guess &guess);
 
-    bool query (Guess *guess, int *rw);
-    bool get_correlation (Guess *guess, Guess *truth, int *rw);
+    bool query (Guess &guess, int rw[]);
+    bool get_correlation (Guess &guess, Guess &truth, int rw[]);
 
   private:
     int type;
