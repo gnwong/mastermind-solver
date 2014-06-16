@@ -189,7 +189,7 @@ int Adversary::smart () {
 // Updates the guess object with the optimal guess in "valid_guesses", with
 // the assumption that each of the entries of valid_guesses is equally likely.
 void Adversary::optimize (Guess &g, std::vector<Guess> &valid_guesses) {
-  this->optimize(g, valid_guesses, 1);
+  this->optimize(g, valid_guesses, 3);
 }
 
 // Allows us to define different optimization techniques.
@@ -199,13 +199,13 @@ void Adversary::optimize (Guess &g, std::vector<Guess> &valid_guesses, int type)
   // -1 ?
   // 1  : min of maxima  ~  1500
   // 2  : min of minima  ~  1
-  // 3  : min of stddev  ~  
+  // 3  : min of stddev  ~  489.755
 
   int rw[2];
   std::vector< std::vector<int> > rws;
   std::vector<int> rws_count;
   std::vector<double> characteristic;
-  int returnValue = -1;
+  double returnValue = -1;
 
   // We can do some pre-guess optimization here. Depending on the type of
   // optimization we're using, we can effectively store the "best guesses"
@@ -216,7 +216,7 @@ void Adversary::optimize (Guess &g, std::vector<Guess> &valid_guesses, int type)
     } else if (type == 2) {
       returnValue = 1;
     } else if (type == 3) {
-
+      returnValue = 489.755;
     }
   }
   
@@ -243,12 +243,19 @@ void Adversary::optimize (Guess &g, std::vector<Guess> &valid_guesses, int type)
       characteristic.push_back(*std::max_element(rws_count.begin(), rws_count.end()));
     } else if (type == 2) {
       characteristic.push_back(*std::min_element(rws_count.begin(), rws_count.end()));
+    } else if (type == 3) {
+      double mean, sum=0;
+      mean = std::accumulate(rws_count.begin(), rws_count.end(), 0) / rws_count.size();
+      for (int k=0; k<rws_count.size(); k++) {
+        sum += (rws_count.at(k) - mean)*(rws_count.at(k) - mean);
+      }
+      characteristic.push_back(sqrt(sum/rws_count.size()));
     } else {
       characteristic.push_back(rws_count.at(0));
     }
 
     if (returnValue != -1) {
-      if (characteristic.back() == returnValue) {
+      if (fabs(characteristic.back() - returnValue) < 0.01) {
         i = valid_guesses.size();
       }
     }
@@ -271,7 +278,8 @@ void Adversary::optimize (Guess &g, std::vector<Guess> &valid_guesses, int type)
     auto it = characteristic.begin();
     while (it < characteristic.end()) {
       it = std::find(it, characteristic.end(), min);
-      // valid_guesses.at(it - characteristic.begin()).print();
+      if (it == characteristic.end()) break;
+      valid_guesses.at(it - characteristic.begin()).print();
       std::advance(it,1);
     }
     std::cout << "Minimized characteristic takes value: " << min << std::endl;
