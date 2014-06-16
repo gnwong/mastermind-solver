@@ -41,21 +41,27 @@ void test1 (Challenger &C);
 
 int main (int argc, char **argv) {
 
+  // In the future, we should probably implement one global PRG to 
+  // ensure that we don't double seed
+  //std::default_random_engine PRG(clock());
+
   Challenger C = Challenger(0);
   Adversary A  = Adversary(C);
-
-  // Call the naive solver as below
-  //std::cout << "Naive guess count: " << A.naive() << std::endl;
-
-  // Start a human game as below
-  //human(C);
 
   // Some tests below
   //test1(C);
 
-  // Run an efficient test
-  std::cout << "Efficient guessing scheme count: " << A.efficient() << std::endl;
+  // Start a human game as below
+  //human(C);
+
+  // Call the naive solver as below
+  //std::cout << "Naive guess count: " << A.naive() << std::endl;
   
+  // Run an efficient test
+  //std::cout << "Efficient guessing scheme count: " << A.efficient() << std::endl;
+  
+  // Run the smartest test we know how
+  std::cout << "Smart guessing scheme count: " << A.smart() << std::endl;
 
   return 0;
 }

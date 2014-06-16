@@ -27,6 +27,9 @@ class Adversary {
     int smart ();
 
   private:
+    void optimize (Guess &g, std::vector<Guess> &valid_guesses);
+    void optimize (Guess &g, std::vector<Guess> &valid_guesses, int type);
+
     Challenger &C;
     int range[2];
                       // The angry observer might protest this should be a preprocessor
