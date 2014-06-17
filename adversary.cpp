@@ -189,7 +189,7 @@ int Adversary::smart () {
 // Updates the guess object with the optimal guess in "valid_guesses", with
 // the assumption that each of the entries of valid_guesses is equally likely.
 void Adversary::optimize (Guess &g, std::vector<Guess> &valid_guesses) {
-  this->optimize(g, valid_guesses, 3);
+  this->optimize(g, valid_guesses, 4);
 }
 
 // Allows us to define different optimization techniques.
@@ -200,6 +200,7 @@ void Adversary::optimize (Guess &g, std::vector<Guess> &valid_guesses, int type)
   // 1  : min of maxima  ~  1500
   // 2  : min of minima  ~  1
   // 3  : min of stddev  ~  489.755
+  // 4  : min of minstd  ~  489.755
 
   int rw[2];
   std::vector< std::vector<int> > rws;
@@ -216,6 +217,8 @@ void Adversary::optimize (Guess &g, std::vector<Guess> &valid_guesses, int type)
     } else if (type == 2) {
       returnValue = 1;
     } else if (type == 3) {
+      returnValue = 489.755;
+    } else if (type == 4) {
       returnValue = 489.755;
     }
   }
@@ -250,6 +253,16 @@ void Adversary::optimize (Guess &g, std::vector<Guess> &valid_guesses, int type)
         sum += (rws_count.at(k) - mean)*(rws_count.at(k) - mean);
       }
       characteristic.push_back(sqrt(sum/rws_count.size()));
+    } else if (type == 4) {
+      int n = 4; // This number changes based on our guess format
+      int count = n*(n+3)/2;
+      double mean, sum=0;
+      mean = std::accumulate(rws_count.begin(), rws_count.end(), 0) / count;
+      for (int k=0; k<rws_count.size(); k++) {
+        sum += (rws_count.at(k) - mean)*(rws_count.at(k) - mean);
+      }
+      sum += (mean*mean)*(count - rws_count.size());
+      characteristic.push_back(sqrt(sum/count));
     } else {
       characteristic.push_back(rws_count.at(0));
     }
@@ -279,7 +292,7 @@ void Adversary::optimize (Guess &g, std::vector<Guess> &valid_guesses, int type)
     while (it < characteristic.end()) {
       it = std::find(it, characteristic.end(), min);
       if (it == characteristic.end()) break;
-      valid_guesses.at(it - characteristic.begin()).print();
+      // valid_guesses.at(it - characteristic.begin()).print();
       std::advance(it,1);
     }
     std::cout << "Minimized characteristic takes value: " << min << std::endl;
