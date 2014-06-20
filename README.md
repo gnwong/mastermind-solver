@@ -1,7 +1,7 @@
 mastermind-solver
 ==============
 
-2004 (c) 
+2014 (c)  George Wong
 
 
 A simple program written in C++ demonstrating several methods of solving the "mastermind" game in an efficient way.
